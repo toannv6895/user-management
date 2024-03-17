@@ -1,0 +1,14 @@
+cognito:
+    poolId: ${COGNITO_USERPOOL_ID}
+quarkus:
+    cognito-user-pools:
+        aws:
+            credentials:
+                static-provider:
+                    access-key-id: ${AWS_ACCESS_KEY_ID}
+                    secret-access-key: ${AWS_ACCESS_KEY_SECRET}
+                type: static
+            region: ${AWS_REGION}
+        endpoint-override: https://cognito-idp.${AWS_REGION}.amazonaws.com/${COGNITO_USERPOOL_ID}/.well-known/openid-configuration
+    package:
+        uber-jar: true
