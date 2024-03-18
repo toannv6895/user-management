@@ -1,7 +1,10 @@
 package org.toannguyen;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import java.util.List;
 
+@RegisterForReflection
 public class GetListUser {
     List<GetUser> users;
     String paginationToken;

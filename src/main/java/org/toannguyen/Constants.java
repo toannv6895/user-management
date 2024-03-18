@@ -17,4 +17,7 @@ public class Constants {
     public static final String USERNAME_FIELD_NAME = "cognito:username";
     public static final String DEFAULT_EMAIL_VERIFIED = "true";
     public static final Integer MAX_USERS_PER_REQUEST = 60;
+    public static final String DYNAMODB_USER_TABLE_NAME = "User";
+    public static final String DYNAMODB_USER_USERNAME_COL = "username";
+    public static final String DYNAMODB_CUSTOMER_ID_FIELD_NAME = "customer";
 }

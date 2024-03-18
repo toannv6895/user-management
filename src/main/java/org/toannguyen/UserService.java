@@ -11,16 +11,17 @@ public class UserService {
     @Inject
     CognitoService cognitoService;
 
-    protected void createUser(CreateUser createUserRequest){
+    protected GetUser createUser(CreateUser createUserRequest){
         String code = null;
         if (StringUtil.isNullOrEmpty(createUserRequest.getPassword())) {
             code = Utils.generatePassword();
             createUserRequest.setPassword(code);
         }
 
-        cognitoService.adminCreateUser(createUserRequest);
+        var resultUser = cognitoService.adminCreateUser(createUserRequest);
         cognitoService.updateVerifiedEmail(createUserRequest.getUsername(), DEFAULT_EMAIL_VERIFIED);
         cognitoService.importRoles(createUserRequest.getAuthorities(), createUserRequest.getUsername());
+        return resultUser;
     }
 
     protected void editUser(EditUser editUser, String username){

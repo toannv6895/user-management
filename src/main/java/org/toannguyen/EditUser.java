@@ -1,9 +1,11 @@
 package org.toannguyen;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import jakarta.validation.constraints.*;
 
 import java.util.Set;
 
+@RegisterForReflection
 public class EditUser {
     @NotBlank
     private String givenName;

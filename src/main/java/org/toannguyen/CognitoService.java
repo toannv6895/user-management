@@ -7,7 +7,10 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.toannguyen.Constants.*;
@@ -34,7 +37,7 @@ public class CognitoService {
 
         GetUser getUser = convertAttributesToResponse(signupResponse);
         getUser.setAuthorities(createUserRequest.getAuthorities());
-
+        getUser.setSites(createUserRequest.getSites());
         return getUser;
     }
 
@@ -212,16 +215,6 @@ public class CognitoService {
         return GetUser;
     }
 
-    protected GetUser convertUserTypeAttributesToResponse(UserType userType) {
-        List<AttributeType> attributeTypes = userType.attributes();
-        GetUser GetUser = convertUserTypeAttributesToResponse(attributeTypes);
-
-        GetUser.setUsername(userType.username());
-        GetUser.setStartDate(Date.from(userType.userCreateDate()));
-        GetUser.setAuthorities(getGroups(userType.username()));
-        return GetUser;
-    }
-
     protected GetUser convertUserTypeAttributesToResponse(List<AttributeType> attributeTypes) {
         GetUser GetUser = new GetUser();
         for (AttributeType attribute : attributeTypes) {
@@ -236,18 +229,6 @@ public class CognitoService {
         }
 
         return GetUser;
-    }
-
-    protected void adminSetUserPassword(String username, String password) {
-        AdminSetUserPasswordRequest adminSetUserPasswordRequest = AdminSetUserPasswordRequest
-                .builder()
-                .userPoolId(poolId)
-                .username(username)
-                .password(password)
-                .permanent(true)
-                .build();
-        AdminSetUserPasswordResponse response = cognitoIdentityProviderClient.adminSetUserPassword(
-                adminSetUserPasswordRequest);
     }
 
     protected AdminAddUserToGroupResponse addUserToGroup(String username, String groupName) {
@@ -296,15 +277,6 @@ public class CognitoService {
                 .stream()
                 .map(GroupType::groupName)
                 .collect(Collectors.toSet());
-    }
-
-    protected void disable(String username) {
-        AdminDisableUserRequest disableUserRequest = AdminDisableUserRequest
-                .builder()
-                .userPoolId(poolId)
-                .username(username)
-                .build();
-        cognitoIdentityProviderClient.adminDisableUser(disableUserRequest);
     }
 
     protected void updateVerifiedEmail(String username, String value) {

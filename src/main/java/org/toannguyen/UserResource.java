@@ -14,10 +14,13 @@ import jakarta.ws.rs.core.Response;
 public class UserResource {
     @Inject
     UserService userService;
+    @Inject
+    DynamoDbService dynamoDbService;
 
     @POST
     public Response createUser(@Valid CreateUser user) {
-        userService.createUser(user);
+        var resultUser = userService.createUser(user);
+        dynamoDbService.add(new User(resultUser));
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -25,6 +28,9 @@ public class UserResource {
     @Path("/{username}")
     public Response editUser(@Valid EditUser user, @PathParam("username") String username) {
         userService.editUser(user, username);
+        var updateUser = new User(user);
+        updateUser.setUsername(username);
+        dynamoDbService.update(updateUser);
         return Response.status(Response.Status.ACCEPTED).build();
     }
 
@@ -32,6 +38,7 @@ public class UserResource {
     @Path("/{username}")
     public Response deleteUser(@PathParam("username") String username) {
         userService.deleteUser(username);
+        dynamoDbService.delete(username);
         return Response.status(Response.Status.ACCEPTED).build();
     }
 
@@ -39,10 +46,17 @@ public class UserResource {
     @Path("/{username}")
     public Response getUser(@PathParam("username") String username) {
         var user = userService.getUser(username);
+        dynamoDbService.get(username);
         if (user == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         return Response.ok(user).build();
+    }
+
+    @GET
+    public Response getUsers() {
+        var users = dynamoDbService.getUsers();
+        return Response.ok(users).build();
     }
 }

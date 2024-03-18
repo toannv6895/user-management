@@ -1,5 +1,6 @@
 package org.toannguyen;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import java.util.Set;
 import static org.toannguyen.Constants.EMAIL_PATTERN;
 import static org.toannguyen.Constants.PASSWORD_PATTERN;
 
+@RegisterForReflection
 public class CreateUser {
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z0-9@._-]{1,128}$", message = "username is not valid, should only contain number, letter, dot, underscore, hyphen and @")

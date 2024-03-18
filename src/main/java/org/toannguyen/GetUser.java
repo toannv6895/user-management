@@ -3,6 +3,7 @@ package org.toannguyen;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -19,7 +20,6 @@ public class GetUser {
     private Set<String> sites;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
-    private String siteInfo;
 
     public String getUsername() {
         return username;
@@ -101,11 +101,4 @@ public class GetUser {
         this.startDate = startDate;
     }
 
-    public String getSiteInfo() {
-        return siteInfo;
-    }
-
-    public void setSiteInfo(String siteInfo) {
-        this.siteInfo = siteInfo;
-    }
 }
