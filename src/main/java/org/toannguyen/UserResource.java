@@ -45,8 +45,7 @@ public class UserResource {
     @GET
     @Path("/{username}")
     public Response getUser(@PathParam("username") String username) {
-        var user = userService.getUser(username);
-        dynamoDbService.get(username);
+        var user = dynamoDbService.get(username);
         if (user == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
